@@ -8,6 +8,8 @@ defmodule AdventOfCode.Solutions.Day03 do
 
   require Logger
 
+  alias AdventOfCode.Utils
+
   def energy_consumption(filename) do
     [gamma, epsilon] =
       filename
@@ -41,7 +43,7 @@ defmodule AdventOfCode.Solutions.Day03 do
   end
 
   defp calculate_energy_indicators(values) do
-    transposed_values = transpose_values(values)
+    transposed_values = Utils.transpose_matrix(values)
 
     gamma = Enum.map(transposed_values, &most_frequent_value/1)
     epsilon = Enum.map(gamma, &opposite_binary/1)
@@ -61,7 +63,7 @@ defmodule AdventOfCode.Solutions.Day03 do
   defp calculate_life_indicator([value], _mode, _position), do: value
 
   defp calculate_life_indicator(values, mode, position) do
-    transposed_values = transpose_values(values)
+    transposed_values = Utils.transpose_matrix(values)
 
     filtering_value =
       transposed_values
@@ -96,13 +98,5 @@ defmodule AdventOfCode.Solutions.Day03 do
       %{"0" => zero_occ, "1" => one_occ} when zero_occ > one_occ -> "0"
       _ -> "1"
     end
-  end
-
-  # This function transposes a list of lists (aka a matrix) to be able to
-  # easily make calculations using columns of values
-  defp transpose_values(values) do
-    values
-    |> List.zip()
-    |> Enum.map(&Tuple.to_list/1)
   end
 end
